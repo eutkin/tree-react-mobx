@@ -22,7 +22,12 @@ function App() {
                     Edit <code>src/App.js</code> and save to reload.
                 </p>
                 <TreeView onChange={node => {
-                    let json = JSON.stringify(node);
+                    const json = JSON.stringify(node, (key, value) => {
+                        if (key === 'version') {
+                            return undefined
+                        }
+                        return value
+                    });
                     console.log("App", json)
                     setJson(json)
                 }} inputProvider={tagInput}/>
