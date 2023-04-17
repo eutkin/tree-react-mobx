@@ -3,16 +3,16 @@ import {observer} from "mobx-react"
 import {observe} from "mobx";
 import {Node} from "../state/Node";
 
-export const TreeView = ({onChange}) => {
+export const TreeView = ({onChange, inputProvider}) => {
 
     const node = new Node()
     node.addLeaf()
     observe(node, change => onChange({...change.object}))
 
-    return <NodeView node={node}/>
+    return <NodeView node={node} inputProvider={inputProvider}/>
 }
 
-const NodeView = observer(({node}) => {
+const NodeView = observer(({node, inputProvider}) => {
 
         return (
             <div>
@@ -24,7 +24,7 @@ const NodeView = observer(({node}) => {
                                     <li key={child.id}>
                                         <ButtonUI text={'+'} onClick={() => node.addLeaf()}/>
                                         <ButtonUI text={'++'} onClick={() => node.addNode().addLeaf()}/>
-                                        <LeafView leaf={child}/>
+                                        <LeafView inputProvider={inputProvider} leaf={child}/>
                                         {/*<DeleteLeafButton text={'-'} node={node} leafId={child.id}/>*/}
 
                                     </li>
@@ -32,7 +32,7 @@ const NodeView = observer(({node}) => {
                             }
                             return (
                                 <div>
-                                    <NodeView node={child}/>
+                                    <NodeView node={child} inputProvider={inputProvider}/>
                                     {/*<DeleteLeafButton text={'--'} node={node} leafId={child.id}/>*/}
                                 </div>
                             )
@@ -45,15 +45,9 @@ const NodeView = observer(({node}) => {
     }
 )
 
-const LeafView = observer(({leaf}) => {
+const LeafView = observer(({inputProvider, leaf}) => inputProvider(leaf))
 
-        return <input type='text'
-                      value={leaf.text}
-                      onChange={e => leaf.changeText(e.target.value)}
-        />
-    }
-)
-
+// eslint-disable-next-line no-unused-vars
 const DeleteLeafButton = ({text, node, leafId: childId}) => {
     if (node.children.length > 1) {
         return <ButtonUI text={text} onClick={() => node.deleteChild(childId)}/>

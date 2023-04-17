@@ -4,6 +4,8 @@ import {TreeView} from "./tree/components/TreeView"
 
 function App() {
 
+    const input = (leaf) => <TextInputView data={leaf.data} onChange={data => leaf.changeData(data)}/>
+
     return (
         <div className="App">
             <header className="App-header">
@@ -11,11 +13,20 @@ function App() {
                 <p>
                     Edit <code>src/App.js</code> and save to reload.
                 </p>
-                <TreeView onChange={node => console.log("App", node)}/>
+                <TreeView onChange={node => console.log("App", node)} inputProvider={input}/>
             </header>
         </div>
     );
 }
+
+const TextInputView = ({data, onChange}) => (
+    <input type='text'
+           value={data.text}
+           onChange={e =>
+               onChange(({'text': e.target.value}))}
+
+    />
+)
 
 
 export default App;

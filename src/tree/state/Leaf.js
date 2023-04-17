@@ -3,15 +3,17 @@ import {makeAutoObservable} from "mobx";
 export class Leaf {
 
     id = Math.floor(Math.random() * 100_000_000)
-    text = ""
 
-    constructor(text) {
+    data = {}
+
+    constructor(data) {
         makeAutoObservable(this)
-        this.text = text
+        this.data = data || {}
     }
 
-    changeText(text) {
-        this.text = text
+    changeData(data) {
+        console.log("Leaf", this.data, data)
+        this.data = data || {}
     }
 }
 
