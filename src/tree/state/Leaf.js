@@ -2,7 +2,7 @@ import {makeAutoObservable} from "mobx";
 
 export class Leaf {
 
-    id = Math.random() * 100_000_000
+    id = Math.floor(Math.random() * 100_000_000)
     text = ""
 
     constructor(text) {

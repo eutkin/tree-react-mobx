@@ -4,6 +4,8 @@ import {Leaf} from "./Leaf";
 
 export class Node {
 
+    id = Math.floor(Math.random() * 100_000_000)
+
     logic = "and";
 
     children = [];
@@ -36,6 +38,14 @@ export class Node {
             this.incrementVersion()
         })
         return childLeaf
+    }
+
+    deleteChild(id) {
+        const index = this.children.findIndex(child => child.id === id)
+        if (index > -1) {
+            this.children = [...this.children.slice(0, index), ...this.children.slice(index + 1, this.children.length)]
+            this.incrementVersion()
+        }
     }
 
     incrementVersion() {

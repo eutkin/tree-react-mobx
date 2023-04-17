@@ -6,6 +6,7 @@ import {Node} from "../state/Node";
 export const TreeView = ({onChange}) => {
 
     const node = new Node()
+    node.addLeaf()
     observe(node, change => onChange({...change.object}))
 
     return <NodeView node={node}/>
@@ -13,20 +14,34 @@ export const TreeView = ({onChange}) => {
 
 const NodeView = observer(({node}) => {
 
-        return [
-            <ButtonUI text={'+'} onClick={() => node.addLeaf()}/>,
-            <ButtonUI text={'++'} onClick={() => node.addNode().addLeaf()}/>,
-            <ul>
-                {
-                    node.children.map(child => {
-                        if (child instanceof Leaf) {
-                            return <li key={child.id}><LeafView leaf={child}/></li>
-                        }
-                        return <NodeView node={child}/>
-                    })
-                }
-            </ul>
-        ]
+        return (
+            <div>
+                <ul>
+                    {
+                        node.children.map(child => {
+                            if (child instanceof Leaf) {
+                                return (
+                                    <li key={child.id}>
+                                        <ButtonUI text={'+'} onClick={() => node.addLeaf()}/>
+                                        <ButtonUI text={'++'} onClick={() => node.addNode().addLeaf()}/>
+                                        <LeafView leaf={child}/>
+                                        {/*<DeleteLeafButton text={'-'} node={node} leafId={child.id}/>*/}
+
+                                    </li>
+                                )
+                            }
+                            return (
+                                <div>
+                                    <NodeView node={child}/>
+                                    {/*<DeleteLeafButton text={'--'} node={node} leafId={child.id}/>*/}
+                                </div>
+                            )
+                        })
+                    }
+                </ul>
+            </div>
+
+        )
     }
 )
 
@@ -38,6 +53,12 @@ const LeafView = observer(({leaf}) => {
         />
     }
 )
+
+const DeleteLeafButton = ({text, node, leafId: childId}) => {
+    if (node.children.length > 1) {
+        return <ButtonUI text={text} onClick={() => node.deleteChild(childId)}/>
+    }
+}
 
 const ButtonUI = ({text, onClick}) => {
     return (
