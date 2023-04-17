@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import {TreeView} from "./tree/components/TreeView"
 
+
+
 function App() {
 
     const input = (leaf) => <TextInputView data={leaf.data} onChange={data => leaf.changeData(data)}/>
@@ -19,14 +21,17 @@ function App() {
     );
 }
 
-const TextInputView = ({data, onChange}) => (
-    <input type='text'
-           value={data.text}
-           onChange={e =>
-               onChange(({'text': e.target.value}))}
+const TextInputView = ({data, onChange}) => {
+    const content = data || {}
+    return (
+        <input type='text'
+               value={content.text}
+               onChange={e =>
+                   onChange(({'text': e.target.value}))}
 
-    />
-)
+        />
+    )
+}
 
 
 export default App;
