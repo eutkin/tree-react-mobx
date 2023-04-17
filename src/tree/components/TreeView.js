@@ -2,14 +2,20 @@ import {Leaf} from "../state/Leaf";
 import {observer} from "mobx-react"
 import {observe} from "mobx";
 import {Node} from "../state/Node";
+import {useRef} from "react";
 
 export const TreeView = ({onChange, inputProvider}) => {
+    const node = useRef(init())
 
+    observe(node.current, change => onChange({...change.object}))
+
+    return <NodeView node={node.current} inputProvider={inputProvider}/>
+}
+
+function init() {
     const node = new Node()
     node.addLeaf()
-    observe(node, change => onChange({...change.object}))
-
-    return <NodeView node={node} inputProvider={inputProvider}/>
+    return node
 }
 
 const NodeView = observer(({node, inputProvider}) => {

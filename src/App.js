@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import {TreeView} from "./tree/components/TreeView"
 import {WithContext as ReactTags} from 'react-tag-input';
+import {useState} from "react";
 
 
 function App() {
@@ -11,6 +12,8 @@ function App() {
 
     const tagInput = (leaf) => <TagView tags={leaf.data} onChange={data => leaf.changeData(data)}/>
 
+    const [json, setJson] = useState({})
+
     return (
         <div className="App">
             <header className="App-header">
@@ -18,7 +21,11 @@ function App() {
                 <p>
                     Edit <code>src/App.js</code> and save to reload.
                 </p>
-                <TreeView onChange={node => console.log("App", JSON.stringify(node))} inputProvider={tagInput}/>
+                <TreeView onChange={node => {
+                    let json = JSON.stringify(node);
+                    console.log("App", json)
+                    setJson(json)
+                }} inputProvider={tagInput}/>
             </header>
         </div>
     );
