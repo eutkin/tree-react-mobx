@@ -1,8 +1,9 @@
-import {makeAutoObservable, observe} from "mobx";
 import {Leaf} from "./Leaf";
 
 
 export class Node {
+
+    parentNode
 
     id = Math.floor(Math.random() * 100_000_000)
 
@@ -12,8 +13,8 @@ export class Node {
 
     version = 0
 
-    constructor(logic, children) {
-        makeAutoObservable(this)
+    constructor(parent, logic, children) {
+        this.parentNode = parent
         this.children = children || []
     }
 
@@ -22,21 +23,20 @@ export class Node {
      * @returns {Node} child node
      */
     addNode() {
-        const childNode = new Node("and", [])
+        const childNode = new Node(this, "and", [])
         this.children = [...this.children, childNode]
-        observe(childNode, change => {
-            this.incrementVersion()
-
-        })
+        if (this.parentNode !== undefined) {
+            this.parentNode.incrementVersion()
+        }
         return childNode
     }
 
     addLeaf() {
-        const childLeaf = new Leaf()
+        const childLeaf = new Leaf(this)
         this.children = [...this.children, childLeaf]
-        observe(childLeaf, change => {
-            this.incrementVersion()
-        })
+        if (this.parentNode !== undefined) {
+            this.parentNode.incrementVersion()
+        }
         return childLeaf
     }
 
@@ -49,6 +49,9 @@ export class Node {
     }
 
     incrementVersion() {
+        if (this.parentNode !== undefined) {
+            this.parentNode.incrementVersion()
+        }
         this.version++
     }
 }

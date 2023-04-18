@@ -22,8 +22,12 @@ function App() {
                     Edit <code>src/App.js</code> and save to reload.
                 </p>
                 <TreeView onChange={node => {
+                    console.log("App-Node", {...node})
                     const json = JSON.stringify(node, (key, value) => {
                         if (key === 'version') {
+                            return undefined
+                        }
+                        if (key === 'parentNode') {
                             return undefined
                         }
                         return value
@@ -55,6 +59,7 @@ const TagView = ({tags, onChange}) => {
     return <ReactTags
         tags={content}
         handleAddition={tag => onChange([...content, tag])}
+        // inline={true}
     />
 }
 
