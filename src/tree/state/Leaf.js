@@ -7,10 +7,8 @@ export class Leaf {
     data = null
 
     constructor(parentNode, level, index, data) {
-        this.level = level
-        this.index = index
-        this.id = 10_000 * level + index
         this.parentNode = parentNode
+        this.id = 10_000 * (Math.floor(this.parentNode.id / 10_000 + 1)) + this.parentNode.children.length
         this.data = data
     }
 

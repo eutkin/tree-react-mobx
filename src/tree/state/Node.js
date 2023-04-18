@@ -13,11 +13,13 @@ export class Node {
 
     version = 0
 
-    constructor(parent, level, index, logic, children) {
-        this.level = level
-        this.index = index
+    constructor(parent, logic, children) {
         this.parentNode = parent
-        this.id = 10_000 * level + index
+        if (this.parentNode !== undefined) {
+            this.id = 10_000 * (Math.floor(this.parentNode.id / 10_000 + 1)) + this.parentNode.children.length
+        } else {
+            this.id = 0
+        }
         this.children = children || []
     }
 
@@ -26,8 +28,8 @@ export class Node {
      * @returns {Node} child node
      */
     addNode() {
-        const childNode = new Node(this, this.level + 1, this.children.length, "and", [])
-        this.children = [...this.children, childNode]
+        const childNode = new Node(this, "and", [])
+        this.children.push(childNode)
         if (this.parentNode !== undefined) {
             this.parentNode.incrementVersion()
         }
@@ -35,8 +37,8 @@ export class Node {
     }
 
     addLeaf() {
-        const childLeaf = new Leaf(this, this.level + 1, this.children.length)
-        this.children = [...this.children, childLeaf]
+        const childLeaf = new Leaf(this)
+        this.children.push(childLeaf)
         if (this.parentNode !== undefined) {
             this.parentNode.incrementVersion()
         }
