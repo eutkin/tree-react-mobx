@@ -45,10 +45,9 @@ export class Node {
         return childLeaf
     }
 
-    deleteChild(id) {
-        const index = this.children.findIndex(child => child.id === id)
-        if (index > -1) {
-            this.children = [...this.children.slice(0, index), ...this.children.slice(index + 1, this.children.length)]
+    deleteChild(childIndex) {
+        if (childIndex > -1) {
+            this.children.splice(childIndex, 1)
             this.incrementVersion()
         }
     }

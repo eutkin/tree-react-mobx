@@ -18,7 +18,11 @@ function init() {
     node.addLeaf();
     return makeObservable(node, {
         version: observable,
+        children: observable,
         incrementVersion: action,
+        addLeaf: action,
+        addNode: action,
+        deleteChild: action
     })
 
 }
@@ -27,20 +31,20 @@ const NodeView = observer(({node, inputProvider}) => {
 
     return (<div>
             <ul>
-                {node.children.map(child => {
+                {node.children.map((child, index) => {
                     if (child instanceof Leaf) {
                         return (<li key={child.id}>
                             <div>
                                 <ButtonUI text={'+'} onClick={() => node.addLeaf()}/>
                                 <ButtonUI text={'++'} onClick={() => node.addNode().addLeaf()}/>
                                 <LeafView inputProvider={inputProvider} leaf={child}/>
-                                <DeleteLeafButton text={'-'} node={node} leafId={child.id}/>
+                                <DeleteLeafButton text={'-'} node={node} index={index}/>
                             </div>
                         </li>)
                     }
                     return (<div>
                         <NodeView node={child} inputProvider={inputProvider}/>
-                        <DeleteLeafButton text={'--'} node={node} leafId={child.id}/>
+                        <DeleteLeafButton text={'--'} node={node} index={index}/>
                     </div>)
                 })}
             </ul>
@@ -49,12 +53,12 @@ const NodeView = observer(({node, inputProvider}) => {
     )
 })
 
-const LeafView = observer(({inputProvider, leaf}) => inputProvider(leaf))
+const LeafView = ({inputProvider, leaf}) => inputProvider(leaf)
 
 // eslint-disable-next-line no-unused-vars
-const DeleteLeafButton = ({text, node, leafId: childId}) => {
+const DeleteLeafButton = ({text, node, index}) => {
     if (node.children.length > 1) {
-        return <ButtonUI text={text} onClick={() => node.deleteChild(childId)}/>
+        return <ButtonUI text={text} onClick={() => node.deleteChild(index)}/>
     }
 }
 
