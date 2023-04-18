@@ -2,11 +2,14 @@ export class Leaf {
 
     parentNode
 
-    id = Math.floor(Math.random() * 100_000_000)
+    id
 
     data = null
 
-    constructor(parentNode, data) {
+    constructor(parentNode, level, index, data) {
+        this.level = level
+        this.index = index
+        this.id = 10_000 * level + index
         this.parentNode = parentNode
         this.data = data
     }

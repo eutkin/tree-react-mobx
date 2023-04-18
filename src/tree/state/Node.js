@@ -5,7 +5,7 @@ export class Node {
 
     parentNode
 
-    id = Math.floor(Math.random() * 100_000_000)
+    id
 
     logic = "and";
 
@@ -13,8 +13,11 @@ export class Node {
 
     version = 0
 
-    constructor(parent, logic, children) {
+    constructor(parent, level, index, logic, children) {
+        this.level = level
+        this.index = index
         this.parentNode = parent
+        this.id = 10_000 * level + index
         this.children = children || []
     }
 
@@ -23,7 +26,7 @@ export class Node {
      * @returns {Node} child node
      */
     addNode() {
-        const childNode = new Node(this, "and", [])
+        const childNode = new Node(this, this.level + 1, this.children.length, "and", [])
         this.children = [...this.children, childNode]
         if (this.parentNode !== undefined) {
             this.parentNode.incrementVersion()
@@ -32,7 +35,7 @@ export class Node {
     }
 
     addLeaf() {
-        const childLeaf = new Leaf(this)
+        const childLeaf = new Leaf(this, this.level + 1, this.children.length)
         this.children = [...this.children, childLeaf]
         if (this.parentNode !== undefined) {
             this.parentNode.incrementVersion()

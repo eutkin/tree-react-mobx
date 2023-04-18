@@ -14,7 +14,7 @@ export const TreeView = ({onChange, inputProvider}) => {
 }
 
 function init() {
-    const node = new Node()
+    const node = new Node(undefined, 0, 0)
     node.addLeaf();
     return makeObservable(node, {
         version: observable,

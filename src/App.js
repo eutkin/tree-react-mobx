@@ -59,7 +59,7 @@ const TagView = ({tags, onChange}) => {
     return <ReactTags
         tags={content}
         handleAddition={tag => onChange([...content, tag])}
-        // inline={true}
+        inline={true}
     />
 }
 
