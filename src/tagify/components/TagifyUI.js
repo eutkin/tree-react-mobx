@@ -19,6 +19,9 @@ export const TagifyUI = ({tokens, onChange}) => {
 
         const tags = tagify.getCleanValue()
 
+        console.log("event", e)
+        console.log("tags", tags)
+
         const expression = tags.map(tag => tag.value).join(' ');
 
         const charStream = CharStreams.fromString(expression);
@@ -30,13 +33,11 @@ export const TagifyUI = ({tokens, onChange}) => {
         const predicateParser = new PredicateParser(tokenStream)
 
         var error = null
-        var errorIndex = null
 
         class E extends ErrorListener {
 
             syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
                 error = e
-                errorIndex = offendingSymbol.tokenIndex
             }
         }
 
@@ -44,26 +45,15 @@ export const TagifyUI = ({tokens, onChange}) => {
 
         predicateParser.predicateLine();
 
-        console.log("error", error)
 
-        if (errorIndex === null) {
-
-        } else {
-
-            // recognition at исключение возвращает 0 индекс токена. А такого у нас нет и он должен быть первым
-            if (errorIndex === 0) {
-                errorIndex = 1
+        if (error != null) {
+            console.log("error", error)
+            if (e.type !== "remove") {
+                const tagElm = e.detail.tag
+                const tagData = {...e.detail.data, __isValid: false}
+                tagify.replaceTag(tagElm, tagData)
             }
-            console.log("index", errorIndex)
-
-            const tagElm = tagify.getTagElms()[errorIndex - 1]
-            console.log(tagify.value[errorIndex - 1])
-            const tagData = {...tagify.value[errorIndex - 1], __isValid: false}
-            console.log("tagData", tagData)
-            tagify.replaceTag(tagElm, tagData)
         }
-        error = null
-        errorIndex = null
 
         const data = tokenStream.tokens.map(token => ({text: token.text}));
 
@@ -76,6 +66,8 @@ export const TagifyUI = ({tokens, onChange}) => {
 
     return <Tags
         tagifyRef={tagifyRef}
-        onChange={onChangeCallback}
+        // onChange={onChangeCallback}
+        onAdd={onChangeCallback}
+        onRemove={onChangeCallback}
     />
 }
