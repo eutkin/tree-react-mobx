@@ -1,7 +1,7 @@
 import Tags from "@yaireo/tagify/dist/react.tagify"
 import "@yaireo/tagify/dist/tagify.css"
 import {useCallback, useRef} from "react";
-import {CharStreams, CommonTokenStream, ErrorListener, ErrorStrategy} from 'antlr4'
+import {CharStreams, CommonTokenStream, ErrorListener} from 'antlr4'
 import PredicateLexer from "../../antlr/PredicateLexer";
 import PredicateParser from "../../antlr/PredicateParser";
 
@@ -13,16 +13,21 @@ export const TagifyUI = ({tokens, onChange}) => {
 
     const tags = safeTokens.map(token => token.text)
 
+    console.log("root-tags", tags)
+
     const onChangeCallback = useCallback(e => {
 
         const tagify = e.detail.tagify;
 
-        const tags = tagify.getCleanValue()
+        const tags = tagify.value
 
         console.log("event", e)
+
+        const expression = tags.map(tag => tag.value).join(' ')
+
         console.log("tags", tags)
 
-        const expression = tags.map(tag => tag.value).join(' ');
+        console.log("expression", expression)
 
         const charStream = CharStreams.fromString(expression);
 
@@ -47,7 +52,6 @@ export const TagifyUI = ({tokens, onChange}) => {
 
 
         if (error != null) {
-            console.log("error", error)
             if (e.type !== "remove") {
                 const tagElm = e.detail.tag
                 const tagData = {...e.detail.data, __isValid: false}
@@ -60,6 +64,7 @@ export const TagifyUI = ({tokens, onChange}) => {
         // remove EOF
         data.splice(data.length - 1, 1)
 
+        console.log("data", data)
         onChange(data)
 
     }, [])
@@ -69,5 +74,6 @@ export const TagifyUI = ({tokens, onChange}) => {
         // onChange={onChangeCallback}
         onAdd={onChangeCallback}
         onRemove={onChangeCallback}
+        value = {tags}
     />
 }
