@@ -30,20 +30,24 @@ export class Node {
      * @returns {Node} child node
      */
     addNode() {
-        const childNode = new Node(this, "and", [])
-        this.children.push(childNode)
         if (this.parentNode !== undefined) {
             this.parentNode.incrementVersion()
+        } else {
+            this.incrementVersion()
         }
+        const childNode = new Node(this, "and", [])
+        this.children.push(childNode)
         return childNode
     }
 
     addLeaf() {
-        const childLeaf = new Leaf(this)
-        this.children.push(childLeaf)
         if (this.parentNode !== undefined) {
             this.parentNode.incrementVersion()
+        } else {
+            this.incrementVersion()
         }
+        const childLeaf = new Leaf(this)
+        this.children.push(childLeaf)
         return childLeaf
     }
 

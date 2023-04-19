@@ -18,11 +18,7 @@ function init() {
     node.addLeaf();
     return makeObservable(node, {
         version: observable,
-        children: observable,
-        incrementVersion: action,
-        addLeaf: action,
-        addNode: action,
-        deleteChild: action
+        incrementVersion: action
     })
 
 }
