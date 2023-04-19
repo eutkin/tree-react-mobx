@@ -1,16 +1,13 @@
 import logo from './logo.svg';
 import './App.css';
 import {TreeView} from "./tree/components/TreeView"
-import {WithContext as ReactTags} from 'react-tag-input';
 import {useState} from "react";
+import {TagifyUI} from "./tagify/components/TagifyUI";
 
 
 function App() {
 
-    // eslint-disable-next-line no-unused-vars
-    const input = (leaf) => <TextInputView data={leaf.data} onChange={data => leaf.changeData(data)}/>
-
-    const tagInput = (leaf) => <TagView tags={leaf.data} onChange={data => leaf.changeData(data)}/>
+    const tagifyInput = (leaf) => <TagifyUI tokens={leaf.data} onChange={data => leaf.changeData(data)} />
 
     const [json, setJson] = useState({})
 
@@ -32,35 +29,11 @@ function App() {
                         }
                         return value
                     });
-                    console.log("App", json)
                     setJson(json)
-                }} inputProvider={tagInput}/>
+                }} inputProvider={tagifyInput}/>
             </header>
         </div>
     );
-}
-
-const TextInputView = ({data, onChange}) => {
-    const content = data || {}
-    return (
-        <input type='text'
-               value={content.text}
-               onChange={e =>
-                   onChange(({'text': e.target.value}))}
-
-        />
-    )
-}
-
-const TagView = ({tags, onChange}) => {
-
-    const content = tags || []
-
-    return <ReactTags
-        tags={content}
-        handleAddition={tag => onChange([...content, tag])}
-        inputFieldPosition="inline"
-    />
 }
 
 
