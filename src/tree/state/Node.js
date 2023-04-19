@@ -7,11 +7,13 @@ export class Node {
 
     id
 
-    logic = "and";
+    logic = "AND";
 
     children = [];
 
     version = 0
+
+    type = "node"
 
     constructor(parent, logic, children) {
         this.parentNode = parent
