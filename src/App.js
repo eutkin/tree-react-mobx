@@ -12,24 +12,22 @@ function App() {
     const [json, setJson] = useState({})
 
 
-    const tagifyInput = useCallback(leaf =>
-            <TagifyUI
-                onChange={(data, isValid) => leaf.changeData(data, isValid)}
-                stateTransformer={transformTextToToken}
-            />
-        , [])
+    const tagifyLeafInput = useCallback(leaf =>
+        <TagifyUI
+            onChange={(data, isValid) => leaf.changeData(data, isValid)}
+            stateTransformer={transformTextToToken}
+        />, [])
 
     const onChange = useCallback(node => {
-        return node => {
-            console.log("App", node)
-            const json = JSON.stringify(node, (key, value) => {
-                if (key === 'parentNode') {
-                    return undefined
-                }
-                return value
-            });
-            setJson(json)
-        };
+
+        console.log("App", node)
+        const json = JSON.stringify(node, (key, value) => {
+            if (key === 'parentNode') {
+                return undefined
+            }
+            return value
+        });
+        setJson(json)
     }, [])
 
     return (
@@ -40,7 +38,7 @@ function App() {
                     Edit <code>src/App.js</code> and save to reload.
                 </p>
                 <TreeView
-                    inputProvider={tagifyInput}
+                    inputProvider={tagifyLeafInput}
                     onChange={onChange}
                 />
             </header>
