@@ -16,9 +16,14 @@ export const TreeView = ({onChange, inputProvider}) => {
 function init() {
     const node = new Node()
     node.addLeaf();
+    // todo Сделать отдельный класс для рутовой ноды
     return makeObservable(node, {
         version: observable,
-        incrementVersion: action
+        incrementVersion: action,
+        children : observable,
+        addNode : action,
+        addLeaf : action,
+        deleteChild : action
     })
 
 }
