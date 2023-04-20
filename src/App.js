@@ -1,15 +1,36 @@
 import logo from './logo.svg';
 import './App.css';
 import {TreeView} from "./tree/components/TreeView"
-import {useState} from "react";
+import {useCallback, useState} from "react";
 import {TagifyUI} from "./tagify/components/TagifyUI";
+import {transformTextToToken} from "./antlr/validation/TransformTextToToken";
 
 
 function App() {
 
-    const tagifyInput = (leaf) => <TagifyUI tokens={leaf.data} onChange={data => leaf.changeData(data)} />
 
     const [json, setJson] = useState({})
+
+
+    const tagifyInput = useCallback(leaf =>
+            <TagifyUI
+                onChange={(data, isValid) => leaf.changeData(data, isValid)}
+                stateTransformer={transformTextToToken}
+            />
+        , [])
+
+    const onChange = useCallback(node => {
+        return node => {
+            console.log("App", node)
+            const json = JSON.stringify(node, (key, value) => {
+                if (key === 'parentNode') {
+                    return undefined
+                }
+                return value
+            });
+            setJson(json)
+        };
+    }, [])
 
     return (
         <div className="App">
@@ -18,19 +39,10 @@ function App() {
                 <p>
                     Edit <code>src/App.js</code> and save to reload.
                 </p>
-                <TreeView onChange={node => {
-                    console.log("App-Node", {...node})
-                    const json = JSON.stringify(node, (key, value) => {
-                        if (key === 'version') {
-                            return undefined
-                        }
-                        if (key === 'parentNode') {
-                            return undefined
-                        }
-                        return value
-                    });
-                    setJson(json)
-                }} inputProvider={tagifyInput}/>
+                <TreeView
+                    inputProvider={tagifyInput}
+                    onChange={onChange}
+                />
             </header>
         </div>
     );

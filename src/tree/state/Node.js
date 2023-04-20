@@ -1,19 +1,50 @@
 import {Leaf} from "./Leaf";
 
 
+/**
+ * Узел дерева.
+ */
 export class Node {
 
-    parentNode
-
+    /**
+     * Идентификатор узла. Используется для удаления.
+     */
     id
 
+    /**
+     * Логика объединения дочерних элементов.
+     * @type {string}
+     */
     logic = "AND";
 
+    /**
+     * Дочерние элементы. Узлы и лепестки.
+     * @type {[]}
+     */
     children = [];
 
+    /**
+     * Версия узла. Изменяется при изменении состояния.
+     * @type {number}
+     */
     version = 0
 
+    /**
+     * Родительский узел. Используется для изменения версии от лепестка до корневого узла.
+     */
+    parentNode
+
+    /**
+     * Тип элемента. Используется для десериализации на сервере при определении типа элемента дерева.
+     * @type {string}
+     */
     type = "node"
+
+    /**
+     * Флаг, обозначающий, что узел содержит только валидные лепестки.
+     * @type {boolean}
+     */
+    valid = true
 
     constructor(parent, logic, children) {
         this.parentNode = parent
@@ -26,8 +57,8 @@ export class Node {
     }
 
     /**
-     *
-     * @returns {Node} child node
+     * Создает дочерний узел.
+     * @returns {Node} дочерний узел.
      */
     addNode() {
         if (this.parentNode !== undefined) {
@@ -40,6 +71,10 @@ export class Node {
         return childNode
     }
 
+    /**
+     * Создает дочерний лепесток.
+     * @returns {Leaf} дочерний лепесток.
+     */
     addLeaf() {
         if (this.parentNode !== undefined) {
             this.parentNode.incrementVersion()
@@ -51,6 +86,10 @@ export class Node {
         return childLeaf
     }
 
+    /**
+     * Удаляет дочерний элемент по его индексу в массиве дочерних элементов текущего узла.
+     * @param childIndex индекс дочернего элемента в массиве текущего узла
+     */
     deleteChild(childIndex) {
         if (childIndex > -1) {
             this.children.splice(childIndex, 1)
@@ -58,10 +97,29 @@ export class Node {
         }
     }
 
+    /**
+     * Увеличивает версию свою и родительского узла.
+     */
     incrementVersion() {
         if (this.parentNode !== undefined) {
             this.parentNode.incrementVersion()
         }
+        this.version++
+    }
+
+    /*
+    todo скорее всего не будет работать для нескольких лепестков.
+     Следует заменить на объект, с идентификатором лепестка и значением.
+     */
+    /**
+     * Устанавливает флаг, обозначающий, что все лепестки валидны.
+     * @param isValid
+     */
+    setValid(isValid) {
+        if (this.parentNode !== undefined) {
+            this.parentNode.setValid(isValid)
+        }
+        this.valid = isValid
         this.version++
     }
 }
