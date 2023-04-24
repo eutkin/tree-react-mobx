@@ -7,11 +7,20 @@ export const TagifyUI = ({onChange, stateTransformer}) => {
     const tagifyRef = useRef()
 
     const onAdd = useCallback(e => {
-        const [data, error] = stateTransformer(e.detail.tagify.value.map(tag => tag.value))
-
+        const tagify = e.detail.tagify;
+        console.log([...tagify.getTagElms(), e.detail.tag])
+        const [data, error] = stateTransformer(tagify.value.map(tag => tag.value))
         if (error != null) {
-            const tagElm = e.detail.tag
-            tagElm.className = tagElm.className + ' tagify--invalid'
+            // todo похоже на колхоз и работате с багами
+            [...tagify.getTagElms(), e.detail.tag].forEach(tagElem => {
+                tagElem.className = (tagElem.className  + ' invalid').trim()
+            })
+
+        } else {
+            // todo похоже на колхоз и работате с багами
+            tagify.getTagElms().forEach(tagElem => {
+                tagElem.className = tagElem.className.replace(' invalid', '')
+            })
         }
 
         onChange(data, error == null)
@@ -20,6 +29,12 @@ export const TagifyUI = ({onChange, stateTransformer}) => {
 
     const onRemove = useCallback(e => {
         const [data, error] = stateTransformer(e.detail.tagify.value.map(tag => tag.value))
+        if (error == null) {
+            // todo похоже на колхоз и работате с багами
+            e.detail.tagify.getTagElms().forEach(tagElem => {
+                tagElem.className = tagElem.className.replace(' invalid', '')
+            })
+        }
         onChange(data, error == null)
 
     }, [])

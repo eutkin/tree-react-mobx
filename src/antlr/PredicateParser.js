@@ -1,10 +1,10 @@
-// Generated from PredicateParser.g4 by ANTLR 4.12.0
+// Generated from ./grammar/PredicateParser.g4 by ANTLR 4.12.0
 // jshint ignore: start
 import antlr4 from 'antlr4';
 import PredicateParserListener from './PredicateParserListener.js';
-const serializedATN = [4,1,3,12,2,0,7,0,2,1,7,1,1,0,1,0,1,0,1,1,1,1,1,1,
+const serializedATN = [4,1,5,12,2,0,7,0,2,1,7,1,1,0,1,0,1,0,1,1,1,1,1,1,
 1,1,1,1,0,0,2,0,2,0,0,9,0,4,1,0,0,0,2,7,1,0,0,0,4,5,3,2,1,0,5,6,5,0,0,1,
-6,1,1,0,0,0,7,8,5,1,0,0,8,9,5,2,0,0,9,10,5,3,0,0,10,3,1,0,0,0,0];
+6,1,1,0,0,0,7,8,5,5,0,0,8,9,5,2,0,0,9,10,5,3,0,0,10,3,1,0,0,0,0];
 
 
 const atn = new antlr4.atn.ATNDeserializer().deserialize(serializedATN);
@@ -17,7 +17,8 @@ export default class PredicateParser extends antlr4.Parser {
 
     static grammarFileName = "PredicateParser.g4";
     static literalNames = [ null, null, "'='" ];
-    static symbolicNames = [ null, "PROPERTY", "EQUALS", "INT_LITERAL" ];
+    static symbolicNames = [ null, "PROPERTY", "EQUALS", "INT_LITERAL", 
+                             "WHITESPACE", "INT_PROPERTY" ];
     static ruleNames = [ "predicateLine", "predicate" ];
 
     constructor(input) {
@@ -61,7 +62,7 @@ export default class PredicateParser extends antlr4.Parser {
 	    try {
 	        this.enterOuterAlt(localctx, 1);
 	        this.state = 7;
-	        this.match(PredicateParser.PROPERTY);
+	        this.match(PredicateParser.INT_PROPERTY);
 	        this.state = 8;
 	        this.match(PredicateParser.EQUALS);
 	        this.state = 9;
@@ -87,6 +88,8 @@ PredicateParser.EOF = antlr4.Token.EOF;
 PredicateParser.PROPERTY = 1;
 PredicateParser.EQUALS = 2;
 PredicateParser.INT_LITERAL = 3;
+PredicateParser.WHITESPACE = 4;
+PredicateParser.INT_PROPERTY = 5;
 
 PredicateParser.RULE_predicateLine = 0;
 PredicateParser.RULE_predicate = 1;
@@ -144,8 +147,8 @@ class PredicateContext extends antlr4.ParserRuleContext {
         this.ruleIndex = PredicateParser.RULE_predicate;
     }
 
-	PROPERTY() {
-	    return this.getToken(PredicateParser.PROPERTY, 0);
+	INT_PROPERTY() {
+	    return this.getToken(PredicateParser.INT_PROPERTY, 0);
 	};
 
 	EQUALS() {

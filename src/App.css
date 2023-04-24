@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.tagify .invalid {
+  --tag-bg: red;
+}

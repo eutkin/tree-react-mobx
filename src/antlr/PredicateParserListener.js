@@ -1,4 +1,4 @@
-// Generated from PredicateParser.g4 by ANTLR 4.12.0
+// Generated from ./grammar/PredicateParser.g4 by ANTLR 4.12.0
 // jshint ignore: start
 import antlr4 from 'antlr4';
 

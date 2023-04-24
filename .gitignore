@@ -10,4 +10,7 @@ package-lock.json
 .idea/misc.xml
 .idea/modules.xml
 *.iml
-/antlr4
+/grammar
+!/grammar/.g4
+/build
+/gen
