@@ -25,7 +25,7 @@ export const TagifyUI = ({onChange, stateTransformer}) => {
 
         onChange(data, error == null)
 
-    }, [])
+    }, [onChange, stateTransformer])
 
     const onRemove = useCallback(e => {
         const [data, error] = stateTransformer(e.detail.tagify.value.map(tag => tag.value))
@@ -37,7 +37,7 @@ export const TagifyUI = ({onChange, stateTransformer}) => {
         }
         onChange(data, error == null)
 
-    }, [])
+    }, [onChange, stateTransformer])
 
     return <Tags
         tagifyRef={tagifyRef}
