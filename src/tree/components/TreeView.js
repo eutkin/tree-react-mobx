@@ -1,6 +1,6 @@
 import {Leaf} from "../state/Leaf";
 import {observer} from "mobx-react"
-import {action, makeObservable, observable, observe} from "mobx";
+import {action, makeObservable, observable, observe, toJS} from "mobx";
 import {Node} from "../state/Node";
 import {useEffect, useRef} from "react";
 
@@ -8,7 +8,7 @@ export const TreeView = ({onChange, inputProvider}) => {
     const node = useRef(init()).current
 
 
-    useEffect(() => observe(node, change => onChange({...change.object})))
+    useEffect(() => observe(node, change => onChange(toJS(change.object))))
 
     return <NodeView node={node} inputProvider={inputProvider}/>
 }
@@ -19,11 +19,10 @@ function init() {
     // todo Сделать отдельный класс для рутовой ноды
     return makeObservable(node, {
         version: observable,
+        children: observable,
         incrementVersion: action,
-        children : observable,
-        addNode : action,
-        addLeaf : action,
-        deleteChild : action
+        addLeaf: action,
+        addNode: action,
     })
 
 }
