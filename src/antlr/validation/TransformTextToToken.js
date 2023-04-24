@@ -2,6 +2,7 @@ import {CharStreams, CommonTokenStream, ErrorListener} from "antlr4";
 import PredicateLexer from "../PredicateLexer";
 import PredicateParser from "../PredicateParser";
 import CommonTokenFactory from "./CommonTokenFactory";
+import AttributeToken from "../token/AttributeToken";
 
 
 class CustomTokenFactory extends CommonTokenFactory {
@@ -25,7 +26,7 @@ class CustomTokenFactory extends CommonTokenFactory {
             const propertyType = property.type
             const tokenSymbolicName = this.typeMapping[propertyType]
             const tokenType = PredicateLexer.symbolicNames.indexOf(tokenSymbolicName)
-            return super.create(source, tokenType, tokenText, channel, start, stop, column)
+            return new AttributeToken(property.index, source, tokenType, tokenText, channel, start, stop, line, column)
         }
         return super.create(source, type, text, channel, start, stop, line, column);
     }
@@ -34,7 +35,8 @@ class CustomTokenFactory extends CommonTokenFactory {
 const tokenFactory = new CustomTokenFactory(
     {
         "s": {
-            type: "Integer"
+            type: "Integer",
+            index: 1
         }
     },
     {
@@ -78,7 +80,19 @@ export const transformTextToToken = (values) => {
 
     predicateParser.predicateLine();
 
-    const data = tokenStream.tokens.map(token => ({text: token.text}));
+
+    const data = tokenStream.tokens.map(token => {
+        if (token instanceof AttributeToken) {
+            return ({
+                index: token.propertyIndex,
+                symbolicName: PredicateLexer.symbolicNames[token.type]
+            })
+        }
+        return ({
+            text: token.text,
+            symbolicName: PredicateLexer.symbolicNames[token.type]
+        })
+    });
 
     // remove EOF
     data.splice(data.length - 1, 1)

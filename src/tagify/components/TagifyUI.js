@@ -11,10 +11,9 @@ export const TagifyUI = ({onChange, stateTransformer}) => {
         console.log([...tagify.getTagElms(), e.detail.tag])
         const [data, error] = stateTransformer(tagify.value.map(tag => tag.value))
         if (error != null) {
-            // todo похоже на колхоз и работате с багами
-            [...tagify.getTagElms(), e.detail.tag].forEach(tagElem => {
-                tagElem.classList.add("invalid")
-            })
+            e.detail.tag.classList.add("invalid")
+            e.detail.tag.__tagifyTagData.title = error
+            console.log(e)
 
         } else {
             // todo похоже на колхоз и работате с багами
