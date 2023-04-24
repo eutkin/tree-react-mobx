@@ -19,10 +19,7 @@ function init() {
     // todo Сделать отдельный класс для рутовой ноды
     return makeObservable(node, {
         version: observable,
-        children: observable,
         incrementVersion: action,
-        addLeaf: action,
-        addNode: action,
     })
 
 }

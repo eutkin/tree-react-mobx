@@ -12,11 +12,11 @@ function App() {
     const [json, setJson] = useState({})
 
 
-    const tagifyLeafInput = useCallback(leaf =>
+    const tagifyLeafInput = leaf =>
         <TagifyUI
             onChange={(data, isValid) => leaf.changeData(data, isValid)}
             stateTransformer={transformTextToToken}
-        />, [])
+        />
 
     const onChange = useCallback(node => {
 
@@ -28,7 +28,7 @@ function App() {
             return value
         });
         setJson(json)
-    }, [])
+    }, [setJson])
 
     return (
         <div className="App">
