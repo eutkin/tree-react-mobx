@@ -13,13 +13,13 @@ export const TagifyUI = ({onChange, stateTransformer}) => {
         if (error != null) {
             // todo похоже на колхоз и работате с багами
             [...tagify.getTagElms(), e.detail.tag].forEach(tagElem => {
-                tagElem.className = (tagElem.className  + ' invalid').trim()
+                tagElem.classList.add("invalid")
             })
 
         } else {
             // todo похоже на колхоз и работате с багами
             tagify.getTagElms().forEach(tagElem => {
-                tagElem.className = tagElem.className.replace(' invalid', '')
+                 tagElem.classList.remove("invalid")
             })
         }
 
@@ -32,7 +32,7 @@ export const TagifyUI = ({onChange, stateTransformer}) => {
         if (error == null) {
             // todo похоже на колхоз и работате с багами
             e.detail.tagify.getTagElms().forEach(tagElem => {
-                tagElem.className = tagElem.className.replace(' invalid', '')
+                tagElem.classList.remove("invalid")
             })
         }
         onChange(data, error == null)
